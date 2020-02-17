@@ -87,14 +87,17 @@ class MailcheckerPlugin extends Gdn_Plugin {
         $domainStart = strrpos($email, '@') + 1;
         $domain = strtolower(substr($email, $domainStart));
 
-        // Set error if host is in the list.
-        if (in_array($domain, $providers)) {
-            $sender->Validation->addValidationResult(
-                'Email',
-                'Disposable mail addresses are not allowed.'
-            );
-            $args['Valid'] = false;
+        // Return if domain is not blacklisted.
+        if (!in_array($domain, $providers)) {
+            return;
         }
+
+        // Set error message.
+        $sender->Validation->addValidationResult(
+            'Email',
+            'Disposable mail addresses are not allowed.'
+        );
+        $args['Valid'] = false;
     }
 
     /**
@@ -121,13 +124,14 @@ class MailcheckerPlugin extends Gdn_Plugin {
         // Save as backup.
         file_put_contents(PATH_CACHE.'/mailchecker/list.txt', $bareboneList);
 
-        $providers = explode("\n", $bareboneList);
-        // Write flattened array to final file.
+        $providersList = str_replace("\n", "','", $bareboneList);
         file_put_contents(
             PATH_CACHE.'/mailchecker/providers.php',
-            '<?php $providers = '.var_export($providers, true).';'
+            '<?php $providers = [\''.$providersList."'];"
         );
+
         // Return count of spam providers in the list.
+        include(PATH_CACHE.'/mailchecker/providers.php');
         return(count($providers));
     }
 }
