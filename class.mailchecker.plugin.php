@@ -1,19 +1,5 @@
 <?php
 
-$PluginInfo['mailchecker'] = [
-    'Name' => 'Mail Checker',
-    'Description' => 'Disallows disposable mail providers. Code is taken from <a href="https://github.com/FGRibreau/mailchecker">Francois-Guillaume Ribreau</a>. All credit is due to him.',
-    'Version' => '0.2',
-    'RequiredApplications' => ['Vanilla' => '2.2'],
-    'HasLocale' => true,
-    'MobileFriendly' => true,
-    'Author' => 'Robin Jurinka',
-    'AuthorUrl' => 'http://vanillaforums.org/profile/R_J',
-    'SettingsUrl' => '/dashboard/settings/mailchecker',
-    'SettingsPermission' => 'Garden.Settings.Manage',
-    'License' => 'MIT'
-];
-
 /**
  * Disallows users to register with a disposable mail address.
  *
