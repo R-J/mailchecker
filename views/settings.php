@@ -7,7 +7,7 @@
 
 <?php
 if (Gdn::config('mailchecker.LastUpdate', false) != false) {
-    echo '<div class="Info">';
+    echo '<div class="padded">';
     echo sprintf(
         Gdn::translate('List has been last updated on: %1s'),
         Gdn_format::date(Gdn::config('mailchecker.LastUpdate'))
