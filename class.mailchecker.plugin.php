@@ -63,27 +63,32 @@ class MailcheckerPlugin extends Gdn_Plugin {
      * @return void.
      */
     public function userModel_beforeRegister_handler($sender, $args) {
-        // List of disposable mail hosts (provided by Francois-Guillaume Ribreau).
-        // Try to get most recent list which is held in cache folder.
-        include(PATH_CACHE.'/mailchecker/providers.php');
-        if (!isset($providers)) {
-            // "Fall back" to contained list.
-            require(__DIR__.'/providers.php');
-        }
         // Get mail provider from form.
         if (isset($args['RegisteringUser'])) {
             $email = $args['RegisteringUser']['Email'];
         } else {
             $email = $args['User']['Email'];
         }
-        $mail = explode('@', $email);
-        // If no valid mail, we do not have to look further.
-        if (count($mail) !== 2) {
+        // Return if no vaild mail.
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return;
         }
 
-        // Return if host is in the list.
-        if (in_array(strtolower($mail[1]), $providers)) {
+        // List of disposable mail hosts (provided by Francois-Guillaume Ribreau).
+        // Try to get most recent list which is held in cache folder.
+        if (file_exists(PATH_CACHE.'/mailchecker/providers.php')) {
+            include(PATH_CACHE.'/mailchecker/providers.php');
+        } else {
+            // "Fall back" to contained list.
+            require(__DIR__.'/providers.php');
+        }
+
+        // Get lowercase domain from email.
+        $domainStart = strrpos($email, '@') + 1;
+        $domain = strtolower(substr($email, $domainStart));
+
+        // Set error if host is in the list.
+        if (in_array($domain, $providers)) {
             $sender->Validation->addValidationResult(
                 'Email',
                 'Disposable mail addresses are not allowed.'
