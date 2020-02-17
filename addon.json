@@ -1,10 +1,11 @@
 {
     "name": "Mail Checker",
     "description": "Disallows disposable mail providers. Code is taken from <a href=\"https://github.com/FGRibreau/mailchecker\">Francois-Guillaume Ribreau</a>. All credit is due to him.",
-    "version": "0.2",
+    "version": "0.3",
     "hasLocale": true,
     "mobileFriendly": true,
     "settingsUrl": "/dashboard/settings/mailchecker",
+    "pluginUrl": "https://github.com/r-j/mailchecker",
     "settingsPermission": "Garden.Settings.Manage",
     "license": "MIT",
     "key": "mailchecker",
@@ -12,10 +13,10 @@
     "authors": [
         {
             "name": "Robin Jurinka",
-            "homepage": "http://vanillaforums.org/profile/R_J"
+            "homepage": "https://open.vanillaforums.com/profile/r_j"
         }
     ],
     "require": {
-        "vanilla": ">=2.2"
+        "vanilla": ">=3.3"
     }
 }
