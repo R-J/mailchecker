@@ -21,29 +21,32 @@ class MailcheckerPlugin extends Gdn_Plugin {
      */
     public function settingsController_mailchecker_create($sender) {
         $sender->permission('Garden.Settings.Manage');
-        $sender->addSideMenu('dashboard/settings/plugins');
-        $sender->setData('Title', t('Mailchecker Settings'));
-        $sender->setData('Description', t('You can update the list from time to time but it is not needed at all since the plugin comes with an initial list.'));
+        $sender->setHighlightRoute('dashboard/settings/plugins');
+        $sender->setData('Title', Gdn::translate('Mailchecker Settings'));
+        $sender->setData(
+            'Description',
+            Gdn::translate('You can update the list from time to time but it is not needed at all since the plugin comes with an initial list.')
+        );
 
         // Fetch new list and give feedback abut the number of providers.
         $sender->Form = new Gdn_Form();
         if ($sender->Form->authenticatedPostBack()) {
             $count = $this->updateList();
             if ($count) {
-                saveToConfig(
+                Gdn::config()->saveToConfig(
                     'mailchecker.LastUpdate',
                     date(time())
                 );
                 $sender->informMessage(
                     sprintf(
-                        t('There are currently %1s spam providers in the list'),
+                        Gdn::translate('There are currently %1s spam providers in the list'),
                         $count
                     )
                 );
             }
         }
 
-        $sender->render($this->getView('settings.php'));
+        $sender->render('settings', '', 'plugins/mailchecker');
     }
 
     /**
