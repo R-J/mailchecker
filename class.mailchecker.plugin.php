@@ -25,7 +25,7 @@ class MailcheckerPlugin extends Gdn_Plugin {
         $sender->setData('Title', Gdn::translate('Mailchecker Settings'));
         $sender->setData(
             'Description',
-            Gdn::translate('You can update the list from time to time but it is not needed at all since the plugin comes with an initial list.')
+            Gdn::translate('You can update the list from time to time but it is no needed to get started.')
         );
 
         // Fetch new list and give feedback abut the number of providers.
