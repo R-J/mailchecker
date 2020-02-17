@@ -107,32 +107,21 @@ class MailcheckerPlugin extends Gdn_Plugin {
         mkdir(PATH_CACHE.'/mailchecker');
 
         // Get main list from GitHub.
-        $url = 'https://raw.githubusercontent.com/FGRibreau/mailchecker/master/list.json';
-        $bareboneList = proxyRequest($url);
-        // Save as backup.
-        file_put_contents(PATH_CACHE.'/mailchecker/list.cjson', $bareboneList);
-
-        // Convert to array.
-        $list = '<?php $providerList = '.$bareboneList.';';
-        file_put_contents(PATH_CACHE.'/mailchecker/list.php', $list);
-        // Get array from file.
-        require_once(PATH_CACHE.'/mailchecker/list.php');
-
-        // "Flatten" array.
-        $providers = [];
-        array_walk_recursive(
-            $providerList,
-            function ($item, $key) use (&$providers) {
-                $providers[] = $item;
-            }
+        $url = Gdn::config(
+            'Mailchecker.UpdateFileUrl',
+            'https://raw.githubusercontent.com/FGRibreau/mailchecker/master/list.txt'
         );
+        $bareboneList = proxyRequest($url);
+
+        // Save as backup.
+        file_put_contents(PATH_CACHE.'/mailchecker/list.txt', $bareboneList);
+
+        $providers = explode("\n", $bareboneList);
         // Write flattened array to final file.
         file_put_contents(
             PATH_CACHE.'/mailchecker/providers.php',
             '<?php $providers = '.var_export($providers, true).';'
         );
-        $providers = '';
-        require_once(PATH_CACHE.'/mailchecker/providers.php');
         // Return count of spam providers in the list.
         return(count($providers));
     }
